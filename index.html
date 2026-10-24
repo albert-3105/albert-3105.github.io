@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Albert Bermúdez, ingeniero multimedia: bots, automatizaciones y programas que facilitan el trabajo. Disponible para trabajo remoto.">
+<meta property="og:title" content="Albert Bermúdez · Bots, automatizaciones y software">
+<meta property="og:description" content="S.I.S.I, mesa de ayuda con tickets, tableros en Looker Studio y más. Disponible para trabajo remoto.">
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>Albert Bermúdez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Schibsted+Grotesk:wght@500;700;800;900&display=swap">
+<style>
+/* Concepto: portafolio como mesa de ayuda. Arriba, una demo que crea un ticket; abajo, proyectos contados como casos resueltos. Todo alineado a la izquierda. */
+:root{
+  --bg:#EEF3F1; --surface:#FFFFFF; --ink:#10231E; --muted:#5C6E68; --line:#D2DDD8;
+  --green:#1F8A5B; --green-soft:#D7EDE2; --on-green:#FFFFFF; --note:#F2C14E; --note-ink:#2B2206;
+  --display:"Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --text:"Atkinson Hyperlegible", Verdana, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1714; --surface:#15201C; --ink:#E6EFEB; --muted:#9BB0A8; --line:#26352F;
+  --green:#4CC38A; --green-soft:#183429; --on-green:#0E1714; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1714; --surface:#15201C; --ink:#E6EFEB; --muted:#9BB0A8; --line:#26352F;
+  --green:#4CC38A; --green-soft:#183429; --on-green:#0E1714; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--text);font-size:18px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1140px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.015em}
+p{margin:0}
+a{color:var(--green);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--green);outline-offset:3px;border-radius:6px}
+.ico{width:1.1em;height:1.1em;flex:none}
+
+/* barra */
+.bar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-block:22px}
+.bar .me{font-family:var(--display);font-weight:800;font-size:20px;color:var(--ink);text-decoration:none}
+.bar nav{display:flex;gap:24px;flex-wrap:wrap}
+.bar nav a{color:var(--muted);text-decoration:none;font-size:16px}
+.bar nav a:hover{color:var(--ink);text-decoration:underline}
+
+/* hero con demo */
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:56px;align-items:start;padding-block:48px 80px}
+.hero h1{font-size:clamp(42px,6.4vw,76px);font-weight:900;line-height:1;letter-spacing:-.035em;max-width:13ch}
+.hero .intro{margin-top:22px;font-size:20px;max-width:46ch;color:var(--muted)}
+.hero .intro b{color:var(--ink)}
+.ask{margin-top:34px;display:grid;gap:10px;max-width:520px}
+.ask label{font-family:var(--display);font-weight:700;font-size:18px}
+.ask textarea{font-family:var(--text);font-size:17px;line-height:1.5;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:14px 16px;resize:vertical;min-height:92px}
+.ask textarea:focus{border-color:var(--green);outline:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{font-family:var(--text);font-size:15px;color:var(--ink);background:transparent;border:1.5px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer}
+.chips button:hover{border-color:var(--green);color:var(--green)}
+.go{justify-self:start;display:inline-flex;align-items:center;gap:10px;background:var(--green);color:var(--on-green);border:0;border-radius:12px;padding:13px 20px;font-family:var(--display);font-weight:700;font-size:17px;cursor:pointer}
+.go:hover{filter:brightness(1.08)}
+
+/* el ticket */
+.ticket{position:relative;background:var(--note);color:var(--note-ink);border-radius:14px;padding:26px 26px 22px;
+  box-shadow:0 1px 0 rgba(0,0,0,.08), 0 18px 40px -22px rgba(43,34,6,.55);transform:rotate(1.2deg);margin-top:8px}
+.ticket::before,.ticket::after{content:"";position:absolute;top:96px;width:22px;height:22px;border-radius:50%;background:var(--bg)}
+.ticket::before{left:-11px}.ticket::after{right:-11px}
+.ticket .stub{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:18px;border-bottom:2px dashed rgba(43,34,6,.35)}
+.ticket .num{font-family:var(--display);font-weight:900;font-size:clamp(28px,3.6vw,38px);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.ticket .state{font-weight:700;font-size:15px;background:var(--note-ink);color:var(--note);border-radius:999px;padding:3px 12px;white-space:nowrap}
+.ticket dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 18px;margin:18px 0 0}
+.ticket dt{font-size:15px;opacity:.75}
+.ticket dd{margin:0;font-weight:700;font-size:16px;word-break:break-word}
+.ticket .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.ticket .actions a,.ticket .actions button{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-weight:700;font-size:15px;
+  border-radius:10px;padding:10px 14px;text-decoration:none;cursor:pointer;border:2px solid var(--note-ink)}
+.ticket .actions a{background:var(--note-ink);color:var(--note)}
+.ticket .actions button{background:transparent;color:var(--note-ink)}
+.ticket .demo{margin-top:14px;font-size:14px;opacity:.78}
+.ticket.pop{animation:pop .45s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes pop{0%{transform:rotate(1.2deg) translateY(10px) scale(.97);opacity:.4}100%{transform:rotate(1.2deg);opacity:1}}
+
+/* secciones */
+section{padding-block:64px;border-top:1.5px solid var(--line)}
+.sh{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:32px;align-items:end;margin-bottom:36px}
+.sh h2{font-size:clamp(34px,4.6vw,54px);font-weight:900;line-height:1.02;letter-spacing:-.03em}
+.sh p{color:var(--muted);max-width:52ch}
+
+/* casos */
+.case{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:40px;padding-block:36px;border-top:1.5px solid var(--line)}
+.case:first-of-type{border-top:0;padding-top:0}
+.case h3{font-size:30px;font-weight:800;line-height:1.1}
+.case .where{color:var(--muted);margin-top:8px;font-size:16px}
+.case .tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.case .tools span{font-size:14px;background:var(--green-soft);color:var(--ink);border-radius:999px;padding:3px 11px}
+.steps{display:grid;gap:18px}
+.steps>div{display:grid;grid-template-columns:132px minmax(0,1fr);gap:16px}
+.steps h4{margin:0;font-family:var(--display);font-weight:700;font-size:16px;color:var(--green)}
+.steps p{max-width:60ch}
+.figs{display:flex;gap:28px;flex-wrap:wrap;margin-top:4px}
+.figs div{display:block}
+.figs strong{display:block;white-space:nowrap;font-family:var(--display);font-weight:900;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.figs span{color:var(--muted);font-size:15px}
+
+
+/* automatizaciones */
+.feature{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px 40px;padding-bottom:44px}
+.feature .f-text{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:8px 40px}
+.feature .f-text h3{font-size:32px;font-weight:800;line-height:1.08}
+.feature .f-text .where{color:var(--muted);font-size:16px;grid-column:1}
+.feature .f-text .d{grid-column:2;grid-row:1/3}
+.feature .f-text .tools{grid-column:1;margin-top:10px}
+.tools{display:flex;flex-wrap:wrap;gap:6px}
+.tools span{font-size:14px;background:var(--green-soft);color:var(--ink);border-radius:999px;padding:3px 11px}
+.code{font-weight:700;background:var(--green-soft);border-radius:6px;padding:0 6px;white-space:nowrap}
+.flow{display:grid;gap:0;align-content:start}
+.node{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:16px 18px}
+.node h4{margin:0 0 4px;font-family:var(--display);font-weight:800;font-size:18px}
+.node p,.node li{color:var(--muted);font-size:16px}
+.node ul{margin:0;padding-left:18px}
+.node.in{border-color:var(--green)}
+.node.out{background:var(--green);border-color:var(--green)}
+.node.out h4,.node.out p{color:var(--on-green)}
+.arrow{height:26px;position:relative}
+.arrow::before{content:"";position:absolute;left:28px;top:3px;bottom:7px;width:2px;background:var(--green)}
+.arrow::after{content:"";position:absolute;left:23px;bottom:2px;border:6px solid transparent;border-top:8px solid var(--green);border-bottom:0}
+.chat{align-self:start;background:#E7DED3;border-radius:18px;overflow:hidden;border:1.5px solid var(--line);color:#111B21}
+.chat-top{display:flex;align-items:center;gap:12px;background:#075E54;color:#fff;padding:12px 16px}
+.chat-top .dot{width:36px;height:36px;border-radius:50%;background:#25D366;flex:none}
+.chat-top b{display:block;font-size:16px}
+.chat-top span{font-size:13px;opacity:.85}
+.msgs{padding:16px;display:grid;gap:10px}
+.msg{background:#fff;border-radius:0 12px 12px 12px;padding:8px 12px 6px;max-width:92%;box-shadow:0 1px 0 rgba(0,0,0,.08)}
+.msg .who{display:block;color:#1F8A5B;font-size:14px}
+.msg p{font-size:15.5px;line-height:1.45}
+.msg .t{display:block;text-align:right;font-size:12px;color:#667781;margin-top:2px}
+.chat-note{background:#F4EFE8;color:#4A5157;font-size:14px;padding:10px 16px}
+.autos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding-block:8px 44px}
+.auto{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:10px}
+.auto h3{font-size:21px;font-weight:800;line-height:1.15}
+.auto p{color:var(--muted);font-size:16px}
+.auto .tag-line{margin-top:auto;padding-top:6px;color:var(--ink);font-size:15px;font-weight:700}
+.auto .n{color:var(--green);font-family:var(--display);font-weight:900;font-size:19px}
+#automatizaciones .case{border-top:1.5px solid var(--line);padding-top:36px}
+@media (max-width:900px){
+  .feature,.feature .f-text{grid-template-columns:1fr}
+  .feature .f-text .d,.feature .f-text .tools,.feature .f-text .where{grid-column:1;grid-row:auto}
+  .autos{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){.autos{grid-template-columns:1fr}}
+
+
+.feature+.feature{border-top:1.5px solid var(--line);padding-top:44px}
+.chat-top .dot.sisi{display:grid;place-items:center;font-family:var(--display);font-weight:900;color:#075E54;font-size:18px}
+.msg.me{justify-self:end;background:#D9FDD3;border-radius:12px 0 12px 12px}
+.dash-feature .pipe{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) 34px minmax(0,1fr) 34px minmax(0,1fr);align-items:stretch}
+.parrow{position:relative}
+.parrow::before{content:"";position:absolute;top:50%;left:6px;right:10px;height:2px;background:var(--green)}
+.parrow::after{content:"";position:absolute;top:calc(50% - 6px);right:3px;border:6px solid transparent;border-left:8px solid var(--green);border-right:0}
+.dash{grid-column:1/-1;margin:0;background:#F1F3F4;border-radius:16px;overflow:hidden;border:1.5px solid var(--line);color:#202124;font-family:Roboto,Arial,sans-serif}
+.dash-top{display:flex;align-items:center;gap:12px;background:#fff;padding:12px 18px;border-bottom:1px solid #DADCE0;flex-wrap:wrap}
+.dash-top b{font-size:16px;font-weight:600}
+.dash-top .pg{margin-left:auto;font-size:13px;color:#1A73E8;border-bottom:2px solid #1A73E8;padding-bottom:2px}
+.ls-logo{width:22px;height:22px;border-radius:5px;background:conic-gradient(#4285F4 0 25%,#34A853 0 50%,#FBBC04 0 75%,#EA4335 0);flex:none}
+.dash-filters{display:flex;flex-wrap:wrap;gap:8px;padding:12px 18px}
+.flt{font-size:13px;background:#fff;border:1px solid #DADCE0;border-radius:4px;padding:4px 10px;color:#3C4043}
+.flt.on{background:#E8F0FE;border-color:#1A73E8;color:#1967D2;font-weight:600}
+.dash-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:0 18px 18px}
+.score{background:#fff;border-radius:8px;padding:14px 16px;box-shadow:0 1px 2px rgba(60,64,67,.15);display:flex;flex-direction:column;gap:4px;min-width:0}
+.score span{font-size:13px;color:#5F6368}
+.score strong{font-size:30px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.score em{font-style:normal;font-size:12.5px;color:#5F6368}
+.meter{height:6px;background:#E8EAED;border-radius:3px;overflow:hidden;margin-top:4px}
+.meter i{display:block;height:100%;background:#1A73E8}
+.chart{grid-column:1/-1;background:#fff;border-radius:8px;padding:14px 16px 6px;box-shadow:0 1px 2px rgba(60,64,67,.15);overflow-x:auto}
+.chart h5{margin:0 0 6px;font-size:14px;font-weight:600}
+.chart svg{display:block;width:100%;max-width:760px;margin:0 auto;min-width:480px;height:auto}
+.dash figcaption{font-size:13.5px;color:#5F6368;padding:0 18px 14px}
+@media (max-width:900px){
+  .dash-feature .pipe{grid-template-columns:1fr}
+  .parrow{height:26px}
+  .parrow::before{top:3px;bottom:7px;left:28px;right:auto;width:2px;height:auto}
+  .parrow::after{top:auto;bottom:2px;left:23px;right:auto;border:6px solid transparent;border-top:8px solid var(--green);border-bottom:0}
+  .dash-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:420px){.score strong{font-size:24px}}
+
+
+
+.avail{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;background:var(--green-soft);color:var(--ink);border-radius:999px;padding:5px 14px;margin-bottom:18px}
+.pulse{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(31,138,91,.5)}70%{box-shadow:0 0 0 8px rgba(31,138,91,0)}100%{box-shadow:0 0 0 0 rgba(31,138,91,0)}}
+@media (prefers-reduced-motion:reduce){.pulse{animation:none}}
+.svc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1.5px solid var(--line);border-radius:18px;background:var(--surface);margin-bottom:8px;overflow:hidden}
+.svc div{padding:20px 22px;border-right:1.5px solid var(--line)}
+.svc div:last-child{border-right:0}
+.svc h3{font-size:19px;font-weight:800;margin-bottom:6px}
+.svc p{color:var(--muted);font-size:15.5px}
+@media (max-width:900px){.svc{grid-template-columns:repeat(2,minmax(0,1fr))}.svc div:nth-child(2){border-right:0}.svc div:nth-child(-n+2){border-bottom:1.5px solid var(--line)}}
+@media (max-width:560px){.svc{grid-template-columns:1fr}.svc div{border-right:0;border-bottom:1.5px solid var(--line)}.svc div:last-child{border-bottom:0}}
+
+.strengths{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px;max-width:560px}
+.strengths li{font-size:15px;font-weight:700;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:4px 12px}
+.shots.dm{grid-template-columns:3fr 1fr}
+.autos .auto:last-child:nth-child(odd){grid-column:1/-1}
+/* Sisi */
+.sisi{display:grid;gap:28px;padding-bottom:48px;margin-bottom:44px;border-bottom:1.5px solid var(--line)}
+.sisi-head{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:36px;align-items:end}
+.sisi-head h3{font-size:clamp(30px,4vw,44px);font-weight:900;line-height:1.02;letter-spacing:-.03em;margin:6px 0 14px}
+.sisi-head .where{color:var(--muted);font-size:16px}
+.sisi-head .d{max-width:62ch;margin-bottom:16px}
+.sisi-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0}
+.sisi-facts div{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px}
+.sisi-facts dt{color:var(--muted);font-size:14.5px}
+.sisi-facts dd{margin:2px 0 0;font-family:var(--display);font-weight:900;font-size:26px;line-height:1.1;font-variant-numeric:tabular-nums}
+.sisi-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;counter-reset:st;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface)}
+.sisi-steps li{counter-increment:st;padding:16px 16px 18px;border-right:1.5px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.sisi-steps li:last-child{border-right:0}
+.sisi-steps li::before{content:counter(st);font-family:var(--display);font-weight:900;font-size:14px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:var(--on-green);margin-bottom:6px}
+.sisi-steps b{font-family:var(--display);font-size:18px}
+.sisi-steps span{color:var(--muted);font-size:15px;line-height:1.45}
+.phones{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:start}
+.wa{margin:0;background:#0B141A;border-radius:22px;overflow:hidden;color:#E9EDEF;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;border:6px solid #1F2C34;box-shadow:0 20px 40px -24px rgba(0,0,0,.6);min-width:0}
+.wa-cap{background:var(--ink);color:var(--bg);font-family:var(--display);font-weight:700;font-size:14px;padding:8px 14px}
+.wa-top{display:flex;align-items:center;gap:10px;background:#202C33;padding:10px 12px;flex-wrap:wrap}
+.wa-top b{font-size:15px}
+.wa-av{width:30px;height:30px;border-radius:50%;background:#E9EDEF;color:#B3261E;display:grid;place-items:center;font-weight:800;font-size:15px;flex:none}
+.tag-admin{margin-left:auto;font-size:11.5px;background:#00A884;color:#0B141A;border-radius:999px;padding:2px 8px;font-weight:700}
+.wa-body{padding:12px 10px 14px;display:flex;flex-direction:column;gap:6px;
+  background-color:#0B141A;background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1.2px);background-size:14px 14px}
+.b{max-width:90%;padding:7px 9px 5px;border-radius:9px;font-size:13.5px;line-height:1.42;position:relative;word-break:break-word}
+.b.in{align-self:flex-start;background:#202C33;border-top-left-radius:2px}
+.b.out{align-self:flex-end;background:#005C4B;border-top-right-radius:2px}
+.b small{display:block;opacity:.75}
+.tm{display:block;text-align:right;font-size:10.5px;color:rgba(233,237,239,.6);margin-top:2px}
+.btn{display:block;text-align:center;margin-top:6px;padding:6px;border-radius:6px;background:rgba(255,255,255,.1);font-size:13px;color:#E9EDEF}
+.btn.list{color:#E9EDEF}
+.btn.g{background:#1F2C34;color:#00A884;font-weight:600}
+.lnk{color:#53BDEB}
+.pdf{display:flex;gap:10px;align-items:center}
+.pdf-ico{background:#E5484D;color:#fff;font-weight:800;font-size:11px;border-radius:4px;padding:8px 6px;flex:none}
+.pdf small{opacity:.7}
+.sheet{margin-top:4px;background:#111B21;border-radius:14px;padding:12px 14px;border:1px solid #233138}
+.sheet-t{display:block;text-align:center;font-size:14px;margin-bottom:6px}
+.sheet ul{list-style:none;margin:0;padding:0}
+.sheet li{padding:7px 0;border-bottom:1px solid #233138;font-size:13.5px}
+.sheet li:last-child{border-bottom:0}
+.sheet small{display:block;color:#8696A0;font-size:12px}
+.wa-foot{margin:6px 2px 0;font-size:12.5px;color:#AEBAC1;line-height:1.45}
+.sisi-bottom{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:32px;align-items:center}
+.cert{margin:0}
+.cert figcaption{color:var(--muted);font-size:14.5px;margin-top:10px}
+.cert-paper{position:relative;overflow:hidden;background:#fff;color:#1F2933;border-radius:10px;padding:22px 24px;box-shadow:0 1px 0 rgba(0,0,0,.06),0 24px 48px -28px rgba(16,35,30,.55);font-family:Helvetica,Arial,sans-serif;display:grid;gap:16px;transform:rotate(-.6deg)}
+.wm{position:absolute;inset:0;display:grid;place-items:center;font-size:30px;font-weight:800;color:rgba(31,41,51,.06);transform:rotate(-24deg);pointer-events:none;text-transform:uppercase;text-align:center;letter-spacing:.04em}
+.cert-row{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:16px;align-items:center}
+.cert-row span{display:block;color:#5B6670;font-size:13px}
+.cert-name{font-size:18px}
+.cert-box{border:2px solid;border-radius:10px;text-align:center;overflow:hidden}
+.cert-box small{display:block;font-size:10.5px;font-weight:700;text-transform:uppercase;padding-top:8px}
+.cert-box strong{display:block;font-size:30px;line-height:1.1}
+.cert-box em{display:block;font-style:normal;color:#fff;font-size:11px;font-weight:700;padding:5px 4px;margin-top:6px}
+.cert-box.green{border-color:#2E9E4F;color:#2E9E4F}.cert-box.green em{background:#2E9E4F}
+.cert-box.blue{border-color:#1F5FB8;color:#1F5FB8}.cert-box.blue em{background:#1F5FB8}
+.cert-data{display:grid;grid-template-columns:1fr auto;gap:4px 12px;border:1px solid #E3E8EC;border-radius:8px;padding:10px 12px;font-size:13px}
+.cert-data span{color:#5B6670}
+.cert-note{font-size:11.5px;color:#5B6670;background:#F4F6F8;border-radius:6px;padding:8px 10px}
+.sisi-why h4{margin:0 0 10px;font-family:var(--display);font-weight:800;font-size:22px}
+.sisi-why ul{margin:0;padding-left:20px;display:grid;gap:8px}
+.sisi-why .mini{margin-top:14px;color:var(--muted);font-size:14.5px}
+@media (max-width:1000px){.phones{grid-template-columns:repeat(2,minmax(0,1fr))}.phones .admin{grid-column:1/-1;max-width:460px}}
+@media (max-width:900px){
+  .sisi-head,.sisi-bottom{grid-template-columns:1fr}
+  .sisi-steps{grid-template-columns:1fr}
+  .sisi-steps li{border-right:0;border-bottom:1.5px solid var(--line);flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+  .sisi-steps li:last-child{border-bottom:0}
+  .sisi-steps li::before{margin:0}
+  .sisi-steps span{flex-basis:100%}
+}
+@media (max-width:640px){.phones{grid-template-columns:1fr}.phones .admin{max-width:none}.cert-row{grid-template-columns:1fr 120px}.cert-paper{transform:none}}
+
+
+.real-dash{grid-column:1/-1;margin:0;display:grid;gap:12px}
+.rd-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.rd-tabs button{font-family:var(--text);font-size:15px;font-weight:700;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer}
+.rd-tabs button:hover{border-color:var(--green)}
+.rd-tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.rd-view{all:unset;cursor:zoom-in;display:block;border-radius:14px;overflow:hidden;border:1.5px solid var(--line);background:#fff;box-shadow:0 24px 50px -30px rgba(16,35,30,.55)}
+.rd-view:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.rd-view img{display:block;width:100%;height:auto}
+.real-dash figcaption{color:var(--muted);font-size:15px}
+.real-dash figcaption span{color:var(--ink);font-weight:700}
+
+
+/* RPA */
+.rpa .f-text{margin-bottom:4px}
+.rpa-demo{min-width:0;align-self:start}
+.rd-bar{display:flex;align-items:center;gap:6px;background:#2B3A4A;color:#fff;border-radius:12px 12px 0 0;padding:9px 12px}
+.rd-bar span{width:10px;height:10px;border-radius:50%;background:#5C6B7A}
+.rd-bar b{margin-left:8px;font-size:14px;font-family:Arial,sans-serif}
+.rd-body{position:relative;background:#F5F7FA;border:1.5px solid #D5DCE3;border-top:0;border-radius:0 0 12px 12px;padding:14px 14px 175px;font-family:Arial,sans-serif;color:#1F2933}
+.rd-table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}
+.rd-table th{text-align:left;color:#B3261E;font-size:12.5px;padding:7px 8px;border-bottom:1px solid #E3E8EC}
+.rd-table td{padding:7px 8px;border-bottom:1px solid #EEF1F4;font-variant-numeric:tabular-nums}
+.rd-table tr.on td:last-child{background:#FFF3C4}
+.rd-table tr.off td:last-child{background:#FCD9D6}
+.rd-table td:first-child{color:#1A73E8;width:26px}
+.rd-panel{position:absolute;left:14px;bottom:12px;width:min(300px,calc(100% - 28px));background:#fff;border:2px solid #188038;border-radius:10px;padding:10px 12px;box-shadow:0 6px 18px rgba(0,0,0,.18);font-size:13px}
+.rd-panel>b{color:#188038}
+.rd-row{margin-top:4px}
+.rd-in{border:1px solid #9AA4AE;padding:0 6px;border-radius:3px}
+.rd-btns{display:flex;gap:6px;margin-top:6px}
+.rd-btns i{font-style:normal;color:#fff;font-weight:700;font-size:12px;border-radius:5px;padding:4px 8px}
+.rd-btns .g{background:#188038}.rd-btns .y{background:#E8A317}.rd-btns .r{background:#C5221F}
+.rd-panel p{margin-top:6px;font-size:12.5px;color:#3C4043}
+.rd-note{color:var(--muted);font-size:14px;margin-top:8px}
+.rpa-side{display:grid;gap:18px;align-content:start}
+.rpa-list{margin:0;padding-left:22px;display:grid;gap:10px}
+.rpa-list li{padding-left:4px}
+.rpa-list b{font-family:var(--display)}
+.rpa-figs{margin-top:0}
+.rpa-figs strong{color:var(--green)}
+
+
+/* turnero */
+.tablet{background:#1F2328;border-radius:22px;padding:12px;align-self:start;min-width:0}
+.tablet>*{font-family:Arial,sans-serif}
+.tb-head{display:flex;justify-content:space-between;align-items:center;background:#B3261E;color:#fff;border-radius:12px 12px 0 0;padding:10px 14px}
+.tb-head span{font-size:13px;opacity:.85}
+.tb-rule{background:#fff;color:#1F2933;font-size:13.5px;padding:10px 14px;margin:0;border-bottom:1px solid #E3E8EC}
+.tb-days{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;background:#fff;padding:10px 12px}
+.tb-days .d{border:1.5px solid #D5DCE3;border-radius:8px;text-align:center;padding:6px 2px;color:#1F2933;display:flex;flex-direction:column;align-items:center;gap:1px}
+.tb-days small{font-size:11px;color:#5B6670}
+.tb-days b{font-size:18px}
+.tb-days em{font-style:normal;font-size:10.5px;color:#5B6670;font-variant-numeric:tabular-nums}
+.tb-days .dot{width:8px;height:8px;border-radius:50%}
+.dot.r{background:#C5221F}.dot.k{background:#1F2933}
+.tb-days .no{opacity:.35}
+.tb-days .sel{border-color:#188038;background:#E6F4EA}
+.tb-form{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;background:#fff;padding:8px 14px;font-size:13px;color:#1F2933;border-top:1px solid #EEF1F4}
+.tb-out{background:#F5F7FA;border-radius:0 0 12px 12px;padding:12px 14px;display:grid;justify-items:start;color:#1F2933}
+.tb-out span{font-size:12.5px;color:#5B6670}
+.tb-out strong{font-size:40px;line-height:1;color:#B3261E;font-variant-numeric:tabular-nums}
+.tb-out small{font-size:12.5px;color:#5B6670}
+.tablet .rd-note{color:#AEB6BF}
+.turnos-list{align-self:start}
+
+/* diseño */
+.work{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:40px;padding-block:36px;border-top:1.5px solid var(--line)}
+.work:first-of-type{border-top:0;padding-top:0}
+.work h3{font-size:30px;font-weight:800;line-height:1.1}
+.work .where{color:var(--muted);margin-top:8px;font-size:16px}
+.work p.d{margin-top:14px;max-width:46ch}
+.shots{display:grid;gap:14px;align-items:center;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:22px;min-width:0}
+.shots.p4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.shots.p3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.shots.c2{grid-template-columns:1.3fr 1fr}
+.shots button{all:unset;cursor:zoom-in;display:block;border-radius:8px}
+.shots button:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.shots img{display:block;width:100%;height:auto;border-radius:6px}
+
+/* experiencia */
+.tl{display:grid}
+.tl div{display:grid;grid-template-columns:190px minmax(0,1fr) minmax(0,1fr);gap:24px;padding-block:16px;border-bottom:1.5px solid var(--line);align-items:baseline}
+.tl .w{color:var(--muted);font-size:16px;font-variant-numeric:tabular-nums}
+.tl .w.now{color:var(--green);font-weight:700}
+.tl h3{font-family:var(--text);font-weight:700;font-size:18px;letter-spacing:0}
+.tl .o{color:var(--muted)}
+.tl p{color:var(--muted);font-size:16px}
+.know{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 40px;margin-top:44px}
+.know h3{font-size:19px;font-weight:700;margin-bottom:4px}
+.know p{color:var(--muted)}
+
+/* contacto */
+.contact{background:var(--ink);color:var(--bg);border-radius:24px;padding:56px clamp(22px,5vw,64px);margin-block:24px 40px;border:0}
+.contact h2{font-size:clamp(36px,5.6vw,64px);font-weight:900;line-height:1;letter-spacing:-.03em;max-width:16ch}
+.contact p.s{margin-top:14px;opacity:.8;max-width:48ch}
+.cg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:36px}
+.cg div{min-width:0}
+.cg .k{opacity:.7;font-size:15px}
+.cg .v{font-family:var(--display);font-weight:700;font-size:20px;word-break:break-word;margin-top:2px}
+.cg button,.cg a{margin-top:10px;display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--bg);border:1.5px solid currentColor;border-radius:10px;
+  padding:7px 12px;font-family:var(--text);font-size:15px;cursor:pointer;text-decoration:none}
+.cg button:hover,.cg a:hover{background:var(--bg);color:var(--ink)}
+footer{color:var(--muted);font-size:15px;padding-block:8px 36px}
+
+dialog{border:0;padding:0;background:transparent;max-width:min(92vw,900px);max-height:92vh}
+dialog::backdrop{background:rgba(6,14,11,.85)}
+dialog img{display:block;max-width:100%;max-height:84vh;margin:0 auto;border-radius:10px}
+dialog p{color:#E6EFEB;text-align:center;margin-top:10px;font-size:16px}
+dialog form{position:fixed;top:max(14px,env(safe-area-inset-top,0px));right:max(14px,env(safe-area-inset-right,0px))}
+dialog form button{display:inline-flex;align-items:center;gap:6px;background:#E6EFEB;color:#10231E;border:0;border-radius:10px;padding:9px 14px;font-family:var(--display);font-weight:700;cursor:pointer}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:40px;padding-block:24px 56px}
+  .sh,.case,.work{grid-template-columns:1fr;gap:20px}
+  .tl div{grid-template-columns:1fr;gap:2px}
+  .cg{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  body{font-size:17px}
+  .steps>div{grid-template-columns:1fr;gap:2px}
+  .shots{padding:12px;gap:8px}
+  .shots.p4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .shots.c2{grid-template-columns:1fr}
+  .know{grid-template-columns:1fr}
+  .ticket{transform:none}
+  .ticket.pop{animation:none}
+}
+@media (prefers-reduced-motion:reduce){.ticket.pop{animation:none}}
+</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5H5V6h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+</svg>
+
+<div class="wrap">
+  <header class="bar">
+    <a class="me" href="#inicio">Albert Bermúdez</a>
+    <nav aria-label="Secciones"><a href="#automatizaciones">Bots</a><a href="#diseno">Diseño</a><a href="#experiencia">Experiencia</a><a href="#contacto">Contacto</a></nav>
+  </header>
+
+  <div class="hero" id="inicio">
+    <div>
+      <p class="avail"><span class="pulse" aria-hidden="true"></span>Disponible para trabajo remoto · Colombia, UTC−5</p>
+      <h1>Cuéntame qué necesitas resolver.</h1>
+      <p class="intro">Soy <b>Albert Bermúdez</b>, ingeniero multimedia. Desarrollo <b>bots, automatizaciones y programas que le facilitan el trabajo a los equipos</b>. Me muevo entre el código, los datos y el diseño: encuentro las tareas que se repiten a mano y las convierto en herramientas sencillas de usar.</p>
+      <ul class="strengths" aria-label="Fortalezas"><li>Solución de problemas</li><li>Pensamiento analítico</li><li>Enfoque en resultados</li><li>Creatividad</li><li>Trabajo en equipo</li><li>Adaptabilidad</li></ul>
+      <form class="ask" id="ask">
+        <label for="need">Prueba cómo trabajo: escribe qué necesitas y te genero un ticket</label>
+        <textarea id="need" placeholder="Ej.: quiero que los pedidos de mi negocio lleguen ordenados por WhatsApp"></textarea>
+        <div class="chips" aria-label="Ideas">
+          <button type="button" data-t="Automatizar un reporte que hoy hago a mano en Excel">Automatizar un reporte</button>
+          <button type="button" data-t="Una app sencilla para manejar los clientes de mi negocio">Una app para mi negocio</button>
+          <button type="button" data-t="Un tablero para ver las ventas del mes">Un tablero de datos</button>
+          <button type="button" data-t="Una página web para mi negocio">Una página web</button>
+        </div>
+        <button class="go" type="submit"><svg class="ico"><use href="#i-ticket"/></svg>Crear ticket</button>
+      </form>
+    </div>
+
+    <article class="ticket" id="ticket" aria-live="polite">
+      <div class="stub"><span class="num" id="t-num">SC-2026-0142</span><span class="state">Abierto</span></div>
+      <dl>
+        <dt>Solicitud</dt><dd id="t-need">Automatizar el reporte mensual que hoy se arma a mano</dd>
+        <dt>Tipo</dt><dd id="t-type">Automatización</dd>
+        <dt>Asignado a</dt><dd>Albert Bermúdez</dd>
+        <dt>Fecha</dt><dd id="t-date">21 oct 2026</dd>
+      </dl>
+      <div class="actions">
+        <a id="t-wa" href="https://wa.me/573205183625" target="_blank" rel="noopener"><svg class="ico"><use href="#i-chat"/></svg>Enviar por WhatsApp</a>
+        <button type="button" id="t-copy"><svg class="ico"><use href="#i-copy"/></svg><span>Copiar mensaje</span></button>
+      </div>
+      <p class="demo" id="t-demo">Ticket de ejemplo. Crea el tuyo con el formulario; nada se envía hasta que tú lo mandes.</p>
+    </article>
+  </div>
+
+  <div class="svc" aria-label="Lo que hago">
+    <div><h3>Chatbots de WhatsApp</h3><p>API oficial de Meta, botones y listas, paso a asesores humanos y documentos PDF.</p></div>
+    <div><h3>Automatización de procesos</h3><p>n8n, Google Apps Script, webhooks y correos que se procesan solos.</p></div>
+    <div><h3>Datos y tableros</h3><p>Bases centralizadas en Google Sheets y tableros en Looker Studio que se actualizan solos.</p></div>
+    <div><h3>Integraciones y servidores</h3><p>Python, Flask, APIs REST, Docker y acceso remoto seguro.</p></div>
+  </div>
+
+  <section id="automatizaciones">
+    <div class="sh"><h2>Bots y automatizaciones</h2><p>Herramientas en uso real en el Sisbén Cúcuta y en proyectos propios. Son internas, así que muestro cómo funcionan sin datos de personas.</p></div>
+
+    <article class="sisi" id="sisi">
+      <div class="sisi-head">
+        <div>
+          <p class="where">Sisbén Cúcuta, 2026 · WhatsApp oficial · @sisicucuta</p>
+          <h3>S.I.S.I, el chatbot del Sisbén Cúcuta</h3>
+          <p class="d">Sistema de Información Sisbén Inteligente. Atiende por WhatsApp las 24 horas: pide autorización de datos, registra a la persona, consulta su clasificación en el RUI, le genera un certificado informativo en PDF y la orienta con un menú. Si necesita a un humano, abre un caso y se lo pasa a los asesores, que responden desde su propio WhatsApp. Por dentro está organizado por capas, con cola de mensajes salientes, cierre por inactividad, horarios de atención, respaldos automáticos en Google Drive y exportes a Excel para control.</p>
+          <div class="tools"><span>WhatsApp Cloud API de Meta</span><span>Botones y listas interactivas</span><span>n8n</span><span>Node.js por capas</span><span>PDFKit</span><span>Google Sheets</span><span>Respaldos en Drive</span><span>Docker</span><span>Tailscale</span></div>
+        </div>
+        <dl class="sisi-facts">
+          <div><dt>Atención automática</dt><dd>24/7</dd></div>
+          <div><dt>Tipos de documento</dt><dd>8</dd></div>
+          <div><dt>Opciones del menú</dt><dd>8</dd></div>
+          <div><dt>Asesores, lunes a viernes</dt><dd>7:30–3:00</dd></div>
+        </dl>
+      </div>
+
+      <ol class="sisi-steps" aria-label="Cómo funciona">
+        <li><b>Autoriza</b><span>Tratamiento de datos con botones Sí / No, como pide la ley.</span></li>
+        <li><b>Se registra</b><span>Nombre, tipo y número de documento, barrio y comuna.</span></li>
+        <li><b>Consulta</b><span>Busca su nivel en el RUI y su grupo del Sisbén anterior.</span></li>
+        <li><b>Resuelve</b><span>Certificado en PDF, requisitos, puntos de atención y preguntas frecuentes.</span></li>
+        <li><b>Escala</b><span>Revisa el horario, crea el caso y avisa a los asesores.</span></li>
+      </ol>
+
+      <div class="phones">
+        <figure class="wa">
+          <figcaption class="wa-cap">Lo que ve el ciudadano</figcaption>
+          <div class="wa-top"><span class="wa-av" aria-hidden="true">S</span><b>@sisicucuta</b></div>
+          <div class="wa-body">
+            <div class="b out">Hola<span class="tm">5:51</span></div>
+            <div class="b in">Buenas tardes 👋 Soy <b>S.I.S.I</b>, el Sistema de Información Sisbén Inteligente.<br><br>🤖 Estoy disponible las 24 horas para orientarte con tus trámites.<br><br>Para continuar, necesitamos que nos autorices a tratar tus datos personales.<span class="tm">5:51</span>
+              <span class="btn">Sí, autorizo</span><span class="btn">No autorizo</span></div>
+            <div class="b out">Sí, autorizo<span class="tm">5:51</span></div>
+            <div class="b in">Ahora dinos tu <b>tipo de documento</b>.<span class="tm">5:52</span><span class="btn list">☰ Ver opciones</span></div>
+            <div class="b out">Cédula de Ciudadanía<br><small>CC</small><span class="tm">5:52</span></div>
+            <div class="b in">✅ Datos registrados. Consultando tu categoría en el RUI…<span class="tm">5:55</span></div>
+            <div class="b in">Buenas tardes <b>DATOS DE PRUEBA</b> 👋<br><br>📊 Tu nivel en el RUI es: <b>C04</b><br>Su puntaje del Sisbén antiguo es: <b>C9</b><span class="tm">5:55</span>
+              <span class="btn">Sisbén (anterior)</span><span class="btn">RUI (actual)</span><span class="btn">Certificado RUI</span></div>
+          </div>
+        </figure>
+
+        <figure class="wa">
+          <figcaption class="wa-cap">Menú y certificado</figcaption>
+          <div class="wa-top"><span class="wa-av" aria-hidden="true">S</span><b>@sisicucuta</b></div>
+          <div class="wa-body">
+            <div class="b out">Certificado RUI<span class="tm">5:55</span></div>
+            <div class="b in pdf"><span class="pdf-ico" aria-hidden="true">PDF</span><span><b>certificado-RUI.pdf</b><small>244 KB · pdf</small></span></div>
+            <div class="b in">📄 Aquí tienes tu certificado (documento informativo, no reemplaza el oficial del DNP).<span class="tm">5:55</span></div>
+            <div class="sheet">
+              <b class="sheet-t">Ver opciones</b>
+              <ul>
+                <li>Consultar mi nivel<small>Tu clasificación en el RUI</small></li>
+                <li>¿Cómo me clasifican?<small>Criterios de clasificación</small></li>
+                <li>Actualizar datos<small>Actualiza tu información</small></li>
+                <li>Solicitar encuesta<small>Requisitos para solicitarla</small></li>
+                <li>Requisitos<small>Requisitos generales</small></li>
+                <li>Hablar con un asesor<small>Atención personalizada</small></li>
+                <li>Puntos de atención<small>Ubicaciones presenciales</small></li>
+                <li>Preguntas frecuentes<small>Dudas comunes sobre el RUI</small></li>
+              </ul>
+            </div>
+          </div>
+        </figure>
+
+        <figure class="wa admin">
+          <figcaption class="wa-cap">Lo que ve el asesor</figcaption>
+          <div class="wa-top"><span class="wa-av" aria-hidden="true">S</span><b>@sisicucuta</b><span class="tag-admin">Número de asesores</span></div>
+          <div class="wa-body">
+            <div class="b in">🔔 <b>Nuevo caso para asesor</b><br><br>Caso: #1<br>Nombre: DATOS DE PRUEBA<br>Tipo Doc: CC<br>Documento: <span class="lnk">1234567890</span><br>Barrio: Centro<br>Comuna: 1<br>WhatsApp: <span class="lnk">57 300 000 0000</span><br>Motivo: Hablar con un asesor<span class="tm">5:57</span>
+              <span class="btn g">Responder</span><span class="btn g">Cerrar caso</span></div>
+            <div class="b out">Responder<span class="tm">5:57</span></div>
+            <div class="b in">✅ Foco en <b>DATOS DE PRUEBA</b>.<br><br>Bot silenciado. Escribe libremente.<br>Escribe <b>salir</b> para terminar.<span class="tm">5:57</span></div>
+            <div class="b out">Hola, ¿cómo puedo ayudarte?<span class="tm">5:57</span></div>
+            <div class="b in">✅ Enviado. Escribe <b>resuelto</b> para cerrar el caso o <b>salir</b> para terminar.<span class="tm">5:58</span></div>
+            <p class="wa-foot">El ciudadano lo recibe como <b>👩‍💼 Asesor S.I.S.I:</b> “Hola, ¿cómo puedo ayudarte?”. Si escribe fuera de horario, Sisi le avisa y el caso queda para el siguiente día hábil.</p>
+          </div>
+        </figure>
+      </div>
+
+      <div class="sisi-bottom">
+        <figure class="cert" aria-label="Certificado informativo de ejemplo">
+          <div class="cert-paper">
+            <span class="wm" aria-hidden="true">Documento informativo · sin validez oficial</span>
+            <div class="cert-row">
+              <div><b class="cert-name">DATOS DE PRUEBA</b><span>Cúcuta — Norte de Santander</span></div>
+              <div class="cert-box green"><small>Clasificación RUI</small><strong>C04</strong><em>Ingreso observado y estimado</em></div>
+            </div>
+            <div class="cert-data"><span>Tipo de documento</span><b>CC</b><span>Número de documento</span><b>1234567890</b></div>
+            <div class="cert-row">
+              <div><b>Información Sisbén IV</b><span>Clasificación vigente a la fecha de consulta</span></div>
+              <div class="cert-box blue"><small>Grupo Sisbén IV</small><strong>C9</strong><em>Vulnerable</em></div>
+            </div>
+            <p class="cert-note">Generado automáticamente por S.I.S.I a partir de la consulta pública del DNP. No reemplaza el certificado oficial.</p>
+          </div>
+          <figcaption>El PDF que arma Sisi en segundos, recreado con datos ficticios.</figcaption>
+        </figure>
+        <div class="sisi-why">
+          <h4>Por qué importa</h4>
+          <ul>
+            <li>La consulta más común, “¿en qué grupo estoy?”, se responde sola a cualquier hora.</li>
+            <li>Los asesores solo atienden lo que de verdad necesita a una persona, con los datos del caso ya listos.</li>
+            <li>Cada conversación y cada caso quedan registrados en la base central para medir el call center.</li>
+            <li>Siempre recuerda que los trámites son presenciales, para no crear falsas expectativas.</li>
+          </ul>
+          <p class="mini">Las capturas se recrearon con datos de prueba. No se muestra información de ciudadanos.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="feature">
+      <div class="f-text">
+        <h3>Mesa de ayuda conectada a WhatsApp</h3>
+        <p class="where">Sisbén Cúcuta, 2026 · en uso todos los días</p>
+        <p class="d">Cualquier solicitud de soporte se vuelve un ticket con número consecutivo, queda en la hoja de control y llega al grupo de WhatsApp del área en segundos. Cuando el ticket se cierra, el bot avisa en el grupo y la persona recibe un correo.</p>
+        <div class="tools"><span>Google Apps Script</span><span>Gmail</span><span>Google Sheets</span><span>n8n</span><span>WAHA</span><span>Docker</span><span>Tailscale</span></div>
+      </div>
+
+      <div class="flow" aria-label="Recorrido de un ticket">
+        <div class="node in">
+          <h4>Entra la solicitud</h4>
+          <ul><li>Correo de soporte, revisado cada 5 minutos</li><li>Formulario web: número de ticket al instante</li><li>Formulario DMC de supervisores</li><li>Ticket manual por teléfono o en persona</li></ul>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="node"><h4>Apps Script</h4><p>Asigna el consecutivo <span class="code">SC-AAAA-NNNN</span>, revisa duplicados y lo guarda en la hoja.</p></div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="node"><h4>n8n en el servidor</h4><p>Recibe el aviso por un enlace protegido con clave y lo pasa a WhatsApp.</p></div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="node out"><h4>Grupo de soporte</h4><p>Llega el mensaje. Al cerrar, aviso de cierre y correo a quien lo pidió.</p></div>
+      </div>
+
+      <div class="chat" aria-label="Ejemplo de mensaje del bot">
+        <div class="chat-top"><span class="dot" aria-hidden="true"></span><div><b>Soporte Sistemas</b><span>Grupo de WhatsApp</span></div></div>
+        <div class="msgs">
+          <div class="msg"><b class="who">Tickets Sisbén</b><p><b>🆕 Nuevo ticket SC-2026-0027</b><br>Punto: Mercedes<br>Asignación manual, dependiendo de disponibilidad<br>Detalle: la impresora del punto no responde</p><span class="t">8:14 a. m.</span></div>
+          <div class="msg"><b class="who">Tickets Sisbén</b><p><b>✅ Ticket SC-2026-0027 cerrado</b></p><span class="t">9:02 a. m.</span></div>
+        </div>
+        <p class="chat-note">Mensaje de ejemplo con el formato real. El aviso lleva número, punto y detalle, nunca nombres ni correos.</p>
+      </div>
+    </article>
+
+
+    <article class="feature dash-feature">
+      <div class="f-text">
+        <h3>Base central y tableros en Looker Studio</h3>
+        <p class="where">Sisbén Cúcuta, 2026 · 4 tableros · se actualizan solos cada mañana</p>
+        <p class="d">Antes los tableros se actualizaban a mano cada mes. Ahora un script en Apps Script une las matrices de encuestas, cinco formularios de campo, el call center y las cifras del DNP, quita repetidos, corrige barrios y nombres, y deja todo listo entre las 5 y las 7 de la mañana para los tableros de Looker Studio.</p>
+        <div class="tools"><span>Apps Script</span><span>Google Sheets</span><span>Drive API</span><span>Looker Studio</span></div>
+      </div>
+      <div class="pipe" aria-label="De dónde salen los datos">
+        <div class="node in"><h4>Fuentes</h4><p>Matrices mensuales, formularios de programación, reporte, efectividad, satisfacción y brigadas, call center y resultados DNP.</p></div>
+        <div class="parrow" aria-hidden="true"></div>
+        <div class="node"><h4>Base central</h4><p>Limpia, une y cuenta con las reglas de la oficina. Periodo del 21 al 20 de cada mes.</p></div>
+        <div class="parrow" aria-hidden="true"></div>
+        <div class="node out"><h4>Tableros</h4><p>Encuestas, reporte mensual, brigadas y puntos, panel de encuestadores y call center.</p></div>
+      </div>
+      <figure class="real-dash">
+        <div class="rd-tabs" role="tablist" aria-label="Tableros">
+          <button role="tab" aria-selected="true" data-img="img/dash-puntos.webp" data-cap="Dashboard Puntos: solicitudes por tipo, top de barrios, ciclo vital y escolaridad.">Puntos de atención</button>
+          <button role="tab" aria-selected="false" data-img="img/dash-brigadas.webp" data-cap="Dashboard Brigadas: lo mismo para las jornadas en barrios, con atención personalizada.">Brigadas</button>
+          <button role="tab" aria-selected="false" data-img="img/dash-encuestas.webp" data-cap="Dashboard Encuestas: aprobadas por el DNP, efectividad, mapa de encuestas por dirección y evolución por comuna.">Encuestas y mapa</button>
+          <button role="tab" aria-selected="false" data-img="img/dash-panel.webp" data-cap="Panel para encuestadores: asignadas, efectivas, novedades y cumplimiento por persona y por día.">Panel de encuestadores</button>
+        </div>
+        <button class="rd-view" id="rd-view" aria-label="Ver tablero en grande"><img id="rd-img" src="img/dash-puntos.webp" alt="Dashboard Puntos de la oficina del Sisbén Cúcuta"></button>
+        <figcaption><span id="rd-cap">Dashboard Puntos: solicitudes por tipo, top de barrios, ciclo vital y escolaridad.</span> Capturas reales de los tableros que diseñé en Looker Studio; los nombres de personas están ocultos. Toca la imagen para verla en grande.</figcaption>
+      </figure>
+    </article>
+
+    <article class="feature rpa">
+      <div class="f-text">
+        <h3>Robot de carga DMC en SisbenApp</h3>
+        <p class="where">Sisbén Cúcuta, 2026 · automatización de un sistema web (RPA)</p>
+        <p class="d">Asignar encuestas a los dispositivos de captura era copiar, buscar y marcar solicitud por solicitud en SisbenApp. Hice un robot en Python que abre el sistema, recibe la ruta pegada en un panel propio y trabaja de 9 en 9: busca los números, marca los que aparecen, abre la asignación, elige el supervisor y el DMC correctos y, antes de confirmar, vuelve a verificar que la selección no haya cambiado. Al final pinta el resultado en Google Sheets y deja todo registrado.</p>
+        <div class="tools"><span>Python</span><span>Playwright</span><span>JavaScript inyectado</span><span>ASP.NET AJAX</span><span>Google Sheets</span><span>Tailscale</span></div>
+      </div>
+
+      <div class="rpa-demo" aria-label="Recreación del robot trabajando sobre SisbenApp">
+        <div class="rd-bar"><span></span><span></span><span></span><b>Solicitudes pendientes</b></div>
+        <div class="rd-body">
+          <table class="rd-table">
+            <thead><tr><th></th><th>Número de solicitud</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr class="on"><td>☑</td><td>54001 0000 0000 0001</td><td>Apareció</td></tr>
+              <tr class="on"><td>☑</td><td>54001 0000 0000 0002</td><td>Apareció</td></tr>
+              <tr class="on"><td>☑</td><td>54001 0000 0000 0003</td><td>Apareció</td></tr>
+              <tr class="off"><td>☐</td><td>54001 0000 0000 0004</td><td>No apareció</td></tr>
+              <tr class="on"><td>☑</td><td>54001 0000 0000 0005</td><td>Apareció</td></tr>
+            </tbody>
+          </table>
+          <div class="rd-panel">
+            <b>Carga DMC automática</b>
+            <div class="rd-row">DMC: <span class="rd-in">DMC_101</span></div>
+            <div class="rd-row">☑ ✔ automático</div>
+            <div class="rd-btns"><i class="g">Iniciar</i><i class="y">Pausar</i><i class="r">Detener</i></div>
+            <p>Ruta 1/2 DMC_101 · Lote 3/6: aparecieron 8, no aparecieron 1. Enviando ✔…</p>
+          </div>
+        </div>
+        <p class="rd-note">Recreación con números ficticios; el sistema real muestra datos de ciudadanos.</p>
+      </div>
+
+      <div class="rpa-side">
+        <ol class="rpa-list">
+          <li><b>Pega la ruta</b> con varias líneas <span class="code">DMC_150</span> y sus números; detecta si un número quedó en dos rutas antes de empezar.</li>
+          <li><b>Espera de verdad</b> a que SisbenApp termine cada recarga, leyendo la señal interna de ASP.NET en vez de tiempos fijos.</li>
+          <li><b>Confirma solo si todo cuadra</b>, o deja que la persona revise y presione ✔. Se puede pausar o detener en cualquier momento.</li>
+          <li><b>Rinde cuentas:</b> pinta el Sheet en amarillo (apareció) o rojo (no apareció), guarda un registro CSV y un botón de diagnóstico captura la pantalla si algo falla.</li>
+          <li><b>Funciona en la oficina o desde casa:</b> encuentra el servidor en la red local o por Tailscale.</li>
+        </ol>
+        <div class="figs rpa-figs"><div><strong>9</strong><span>solicitudes por lote</span></div><div><strong>75</strong><span>cargadas en las primeras pruebas</span></div></div>
+      </div>
+    </article>
+
+    <article class="feature turnos">
+      <div class="f-text">
+        <h3>Turnero del Sisbén con agenda y pico y cédula</h3>
+        <p class="where">Sisbén Cúcuta, 2026 · servidor en la red de la oficina, funciona sin internet</p>
+        <p class="d">Los asesores generan los turnos desde una tablet. El sistema agenda hasta 14 días hábiles, aplica solo la regla de pico y cédula (cédula par, día par), pone un tope de 200 turnos por día y deja registrada cada excepción con su motivo. Cada turno se guarda en el equipo, se copia a Google Sheets y le llega al ciudadano por correo.</p>
+        <div class="tools"><span>Node.js</span><span>Google Sheets API</span><span>Correo SMTP</span><span>Contraseñas con scrypt</span><span>Servicio de Windows</span></div>
+      </div>
+
+      <div class="tablet" aria-label="Recreación del turnero">
+        <div class="tb-head"><b>Turnos SISBÉN</b><span>Asesor</span></div>
+        <p class="tb-rule">Cédula terminada en <b>4</b> (par): le sirven los días pares.</p>
+        <div class="tb-days">
+          <div class="d ok"><small>Lun</small><b>26</b><i class="dot r"></i><em>143/200</em></div>
+          <div class="d no"><small>Mar</small><b>27</b><i class="dot k"></i><em>200/200</em></div>
+          <div class="d ok sel"><small>Mié</small><b>28</b><i class="dot r"></i><em>61/200</em></div>
+          <div class="d no"><small>Jue</small><b>29</b><i class="dot k"></i><em>12/200</em></div>
+          <div class="d ok"><small>Vie</small><b>30</b><i class="dot r"></i><em>0/200</em></div>
+        </div>
+        <div class="tb-form">
+          <span>Documento <b>•••• •••• 4</b></span>
+          <span>☐ Aplica excepción</span>
+        </div>
+        <div class="tb-out"><span>Turno generado</span><strong>A62</strong><small>Miércoles 28 · enviado por correo</small></div>
+        <p class="rd-note">Recreación con datos ficticios.</p>
+      </div>
+
+      <ul class="rpa-list turnos-list">
+        <li><b>Seguro aunque esté en la red:</b> pide usuario y contraseña, guarda la contraseña cifrada (scrypt), cierra la sesión a las 12 horas y bloquea 5 minutos tras 5 intentos fallidos.</li>
+        <li><b>No se cae si falla internet:</b> el turno queda en el equipo y se puede descargar en CSV; Google Sheets y el correo se sincronizan cuando hay conexión.</li>
+        <li><b>Panel de administración</b> para ver y descargar los turnos de cualquier día agendado.</li>
+        <li><b>Arranca solo</b> con el computador como servicio de Windows, y está listo para pasar a PostgreSQL.</li>
+      </ul>
+    </article>
+
+    <div class="autos">
+      <article class="auto">
+        <h3>Servidor propio de automatizaciones</h3>
+        <p>Servidor Linux con contenedores Docker para n8n, WhatsApp (WAHA) y Sisi, acceso remoto por Tailscale sin abrir puertos y una guía para dejarlo andando después de cada reinicio.</p>
+        <p class="tag-line">Linux · Docker · Tailscale</p>
+      </article>
+      <article class="auto">
+        <h3>Formulario de cargue y descargue DMC</h3>
+        <p>Cada supervisor elige a su equipo y registra el DMC, la fecha y la cantidad de encuestas. Al enviarlo se crea un ticket solo, con el mismo contador y el mismo aviso a WhatsApp.</p>
+        <p class="tag-line"><span class="n">30</span> encuestadores · <span class="n">3</span> supervisores</p>
+      </article>
+      <article class="auto">
+        <h3>Cruce de datos de Aliados</h3>
+        <p>Crucé las solicitudes hechas por aliados contra el formulario de datos complementarios para encontrar cuáles estaban incompletas, por encuestador y por mes, y entregué el resultado en Excel.</p>
+        <p class="tag-line"><span class="n">4.337</span> solicitudes revisadas · <span class="n">51 %</span> sin datos complementarios</p>
+      </article>
+      <article class="auto">
+        <h3>Bots en Python y mensajería</h3>
+        <p>Como independiente: bots para redes sociales, mensajes por WhatsApp y SMS con Twilio y APIs propias en Flask para conectar sistemas.</p>
+        <p class="tag-line">Python · Twilio · Flask · 2024 a 2025</p>
+      </article>
+      <article class="auto">
+        <h3>Publicación automática en redes</h3>
+        <p>Para Digital Forge programé por API las publicaciones de Instagram y Facebook con hora fija, produje videos cortos con nuestra mascota Pixi y revisé las métricas para decidir qué formato seguir: el video rindió mucho más que las imágenes.</p>
+        <p class="tag-line"><span class="n">14</span> publicaciones programadas · API de publicación · Instagram · Facebook · TikTok</p>
+      </article>
+      <article class="auto">
+        <h3>Informe mensual en un clic</h3>
+        <p>App en Streamlit: se suben los archivos del sistema y de datos complementarios, filtra el corte del 21 al 20 y calcula las 5 tablas del informe mensual, listas para el libro maestro. La validé contra abril y, al comparar con los meses anteriores, encontró una diferencia de 607 registros en febrero y marzo que había que aclarar.</p>
+        <p class="tag-line">Python · Streamlit · pandas · Excel</p>
+      </article>
+    </div>
+
+    <article class="case">
+      <div><h3>Marketing en Lovol</h3><p class="where">Director de Marketing, dic 2025 a feb 2026</p>
+        <div class="tools"><span>Meta Ads</span><span>Trello</span><span>Google Maps</span><span>Waze</span></div></div>
+      <div class="steps">
+        <div><h4>Qué hice</h4><p>Dirigí el equipo de diseño y video, planeé el contenido y manejé las campañas y la presencia del negocio en mapas.</p></div>
+        <div><h4>Qué cambió</h4><div class="figs"><div><strong>+204 %</strong><span>en Instagram</span></div><div><strong>+900</strong><span>seguidores en TikTok</span></div><div><strong>50</strong><span>clientes potenciales</span></div></div></div>
+      </div>
+    </article>
+  </section>
+
+  <section id="diseno">
+    <div class="sh"><h2>Diseño de apps, web y piezas</h2><p>Toca una imagen para verla en grande.</p></div>
+
+    <article class="work">
+      <div><h3>Sitio web de Digital Forge</h3><p class="where">Mi empresa, con mi socio · 2026 · en línea</p>
+        <p class="d">Sitio de la empresa hecho en Astro: 18 páginas en español, inglés y portugués, diseño adaptado a celular y publicación automática en Netlify cada vez que se sube un cambio a GitHub. También diseñé la identidad de marca: logo, colores y tipografías.</p>
+        <div class="tools" style="margin-top:14px"><span>Astro</span><span>3 idiomas</span><span>Netlify</span><span>GitHub</span></div>
+        <p style="margin-top:14px"><a href="https://digitalforgedev.netlify.app" target="_blank" rel="noopener">Ver el sitio en línea ↗</a></p></div>
+      <div class="shots dm">
+        <button data-src="img/df-desk.webp" data-cap="Digital Forge en computador"><img src="img/df-desk.webp" alt="Inicio del sitio de Digital Forge en computador"></button>
+        <button data-src="img/df-mob.webp" data-cap="Digital Forge en celular"><img src="img/df-mob.webp" alt="Inicio del sitio de Digital Forge en celular"></button>
+      </div>
+    </article>
+
+    <article class="work">
+      <div><h3>AgroLácteoPro</h3><p class="where">App móvil, diseño UI/UX</p>
+        <p class="d">Para fincas lecheras: registro corto con lo esencial y un panel con animales, calendario de ordeño, vacunación y lotes de pastoreo. El menú lateral lleva a la gestión de fincas y a la información del ICA.</p></div>
+      <div class="shots p4">
+        <button data-src="img/agro-1.webp" data-cap="AgroLácteoPro, bienvenida"><img src="img/agro-1.webp" alt="AgroLácteoPro, pantalla de bienvenida"></button>
+        <button data-src="img/agro-2.webp" data-cap="AgroLácteoPro, registro"><img src="img/agro-2.webp" alt="AgroLácteoPro, registro de la finca"></button>
+        <button data-src="img/agro-3.webp" data-cap="AgroLácteoPro, panel de la finca"><img src="img/agro-3.webp" alt="AgroLácteoPro, panel con animales, ordeño y vacunación"></button>
+        <button data-src="img/agro-4.webp" data-cap="AgroLácteoPro, menú"><img src="img/agro-4.webp" alt="AgroLácteoPro, menú lateral"></button>
+      </div>
+    </article>
+
+    <article class="work">
+      <div><h3>Publitech Services</h3><p class="where">App móvil, diseño UI/UX</p>
+        <p class="d">Para vendedores por comisión: inicio de sesión directo, perfil editable y pedidos, comisiones y envíos como barras de progreso hacia la meta.</p></div>
+      <div class="shots p4">
+        <button data-src="img/publi-1.webp" data-cap="Publitech, inicio"><img src="img/publi-1.webp" alt="Publitech, pantalla de inicio"></button>
+        <button data-src="img/publi-2.webp" data-cap="Publitech, inicio de sesión"><img src="img/publi-2.webp" alt="Publitech, inicio de sesión"></button>
+        <button data-src="img/publi-3.webp" data-cap="Publitech, perfil"><img src="img/publi-3.webp" alt="Publitech, perfil"></button>
+        <button data-src="img/publi-4.webp" data-cap="Publitech, metas"><img src="img/publi-4.webp" alt="Publitech, pedidos, comisiones y envíos"></button>
+      </div>
+    </article>
+
+    <article class="work">
+      <div><h3>Sitio de Patrimonio y Memoria</h3><p class="where">Ministerio de las Culturas, pasantía 2023</p>
+        <p class="d">Propuesta de rediseño del sitio institucional: empecé con wireframes para ordenar la información y terminé en una versión clara para celular.</p></div>
+      <div class="shots p4">
+        <button data-src="img/wire-1.webp" data-cap="Wireframe de inicio"><img src="img/wire-1.webp" alt="Wireframe de la página de inicio"></button>
+        <button data-src="img/web-1.webp" data-cap="Inicio en celular"><img src="img/web-1.webp" alt="Sitio en celular, inicio"></button>
+        <button data-src="img/web-2.webp" data-cap="Noticias en celular"><img src="img/web-2.webp" alt="Sitio en celular, noticias"></button>
+        <button data-src="img/web-3.webp" data-cap="Actividades en celular"><img src="img/web-3.webp" alt="Sitio en celular, actividades"></button>
+      </div>
+    </article>
+
+    <article class="work">
+      <div><h3>Piezas para el Ministerio</h3><p class="where">Redes e impresos, 2023</p>
+        <p class="d">Campañas de la Dirección de Patrimonio y Memoria, como el Mes del Patrimonio y la guía de exportación de bienes muebles.</p></div>
+      <div class="shots c2">
+        <button data-src="img/pieza-patrimonio.webp" data-cap="Septiembre, Mes del Patrimonio"><img src="img/pieza-patrimonio.webp" alt="Pieza Mes del Patrimonio"></button>
+        <button data-src="img/pieza-exportacion.webp" data-cap="Exportación de bienes muebles"><img src="img/pieza-exportacion.webp" alt="Pieza sobre exportación de bienes muebles"></button>
+      </div>
+    </article>
+
+    <article class="work">
+      <div><h3>MagicLeds</h3><p class="where">Redes sociales</p>
+        <p class="d">Publicaciones de Instagram para una tienda de domótica: el producto al centro, el precio visible y un estilo neón reconocible en el feed.</p></div>
+      <div class="shots p3">
+        <button data-src="img/magic-apagador.webp" data-cap="Apagador inteligente WiFi"><img src="img/magic-apagador.webp" alt="Publicación apagador inteligente"></button>
+        <button data-src="img/magic-echo.webp" data-cap="Alexa Echo Dot"><img src="img/magic-echo.webp" alt="Publicación Alexa Echo Dot"></button>
+        <button data-src="img/magic-feed.webp" data-cap="Perfil de Instagram"><img src="img/magic-feed.webp" alt="Perfil de Instagram de MagicLeds"></button>
+      </div>
+    </article>
+  </section>
+
+  <section id="experiencia">
+    <div class="sh"><h2>Experiencia</h2><p>Casi tres años, de la más reciente a la más antigua.</p></div>
+    <div class="tl">
+      <div><span class="w now">Ene 2026 a hoy</span><span><h3>Ingeniero de Sistemas</h3><span class="o">Sisbén, Alcaldía de Cúcuta</span></span><p>Mesa de ayuda, base central, tableros, servidor y bots.</p></div>
+      <div><span class="w now">2026 a hoy</span><span><h3>Cofundador</h3><span class="o">Digital Forge</span></span><p>Software a la medida y automatización para clientes.</p></div>
+      <div><span class="w">Dic 2025 a feb 2026</span><span><h3>Director de Marketing</h3><span class="o">Lovol</span></span><p>Equipo creativo, contenido, Meta Ads y presencia local.</p></div>
+      <div><span class="w">Ene a dic 2025</span><span><h3>Ingeniero Multimedia</h3><span class="o">Ascontrif Empresarial</span></span><p>Soluciones digitales, reportes de datos y automatización.</p></div>
+      <div><span class="w">Ene 2024 a jun 2025</span><span><h3>Desarrollador independiente</h3><span class="o">Proyectos propios</span></span><p>Bots en Python, Twilio, sitios web y APIs con Flask.</p></div>
+      <div><span class="w">Ago a dic 2023</span><span><h3>Pasante de comunicaciones</h3><span class="o">Ministerio de las Culturas</span></span><p>Piezas gráficas, sitio web y SharePoint.</p></div>
+    </div>
+    <div class="know">
+      <div><h3>Programación y automatización</h3><p>Python, JavaScript, Java, HTML y CSS, Google Apps Script, Flask, APIs REST, n8n, Twilio, Docker, Linux.</p></div>
+      <div><h3>Datos</h3><p>Google Sheets y Looker Studio.</p></div>
+      <div><h3>Diseño</h3><p>Suite Adobe, Canva, Blender, Unity, Filmora, Android Studio.</p></div>
+      <div><h3>Formación</h3><p>Ingeniería Multimedia, Universidad Simón Bolívar (2024). Diplomado en apps móviles, Tecnisistemas y Compensar. Minor en dirección de marketing. Inglés B1.</p></div>
+    </div>
+  </section>
+
+  <section class="contact" id="contacto">
+    <h2>¿Buscas a alguien para automatizar tu operación?</h2>
+    <p class="s">Busco un trabajo remoto de tiempo completo o un proyecto estable. Escríbeme por WhatsApp, correo o LinkedIn.</p>
+    <div class="cg">
+      <div><div class="k">WhatsApp</div><div class="v" id="v-tel">+57 320 518 3625</div><a href="https://wa.me/573205183625" target="_blank" rel="noopener"><svg class="ico"><use href="#i-chat"/></svg>Abrir chat</a></div>
+      <div><div class="k">Correo</div><div class="v" id="v-mail">albertbermudez31@gmail.com</div><button type="button" data-copy="v-mail"><svg class="ico"><use href="#i-copy"/></svg><span>Copiar</span></button></div>
+      <div><div class="k">LinkedIn</div><div class="v">albert-bermudez</div><a href="https://www.linkedin.com/in/albert-bermudez-554837252/" target="_blank" rel="noopener"><svg class="ico"><use href="#i-out"/></svg>Ver perfil</a></div>
+    </div>
+  </section>
+  <footer>Albert Bermúdez, ingeniero multimedia. Cúcuta, Colombia, 2026.</footer>
+</div>
+
+<dialog id="lb" aria-label="Imagen ampliada">
+  <form method="dialog"><button><svg class="ico"><use href="#i-x"/></svg>Cerrar</button></form>
+  <img id="lb-img" alt=""><p id="lb-cap"></p>
+</dialog>
+
+<script>
+const $=id=>document.getElementById(id);
+const need=$('need'), ticket=$('ticket');
+const meses=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const hoy=()=>{const d=new Date();return d.getDate()+' '+meses[d.getMonth()]+' '+d.getFullYear()};
+$('t-date').textContent=hoy();
+function tipo(t){t=t.toLowerCase();
+  if(/whatsapp|bot|autom|reporte|excel|correo|proceso/.test(t))return 'Automatización';
+  if(/tablero|dato|venta|indicador|gráfic|grafic|dashboard/.test(t))return 'Datos y tableros';
+  if(/app|aplicaci|móvil|movil|celular/.test(t))return 'App';
+  if(/web|página|pagina|sitio|tienda/.test(t))return 'Página web';
+  if(/logo|diseñ|disen|post|red|instagram|marca|publicidad/.test(t))return 'Diseño y marketing';
+  return 'Por revisar';}
+function mensaje(){return 'Hola Albert, vengo de tu portafolio. Ticket '+$('t-num').textContent+': '+$('t-need').textContent}
+function syncWa(){$('t-wa').href='https://wa.me/573205183625?text='+encodeURIComponent(mensaje())}
+syncWa();
+document.querySelectorAll('.chips button').forEach(b=>b.addEventListener('click',()=>{need.value=b.dataset.t;need.focus()}));
+$('ask').addEventListener('submit',e=>{
+  e.preventDefault();
+  const t=need.value.trim();
+  if(!t){need.placeholder='Escribe primero qué necesitas, por ejemplo: una página para mi negocio';need.focus();return}
+  const n=String(143+Math.floor(Math.random()*800)).padStart(4,'0');
+  $('t-num').textContent='SC-'+new Date().getFullYear()+'-'+n;
+  $('t-need').textContent=t; $('t-type').textContent=tipo(t); $('t-date').textContent=hoy();
+  $('t-demo').textContent='Tu ticket está listo. Envíalo por WhatsApp o copia el mensaje.';
+  syncWa();
+  ticket.classList.remove('pop'); void ticket.offsetWidth; ticket.classList.add('pop');
+  if(innerWidth<900) ticket.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+});
+function copiar(txt,btn,el){
+  const lab=btn.querySelector('span'), orig=lab.textContent;
+  const done=t=>{lab.textContent=t;setTimeout(()=>lab.textContent=orig,1700)};
+  const sel=()=>{if(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}done('Selecciónalo y copia')};
+  try{navigator.clipboard.writeText(txt).then(()=>done('Copiado'),sel)}catch(e){sel()}
+}
+$('t-copy').addEventListener('click',e=>copiar(mensaje(),e.currentTarget,$('t-need')));
+document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>{const el=$(b.dataset.copy);copiar(el.textContent.trim(),b,el)}));
+const lb=$('lb');
+document.querySelectorAll('.shots button').forEach(b=>b.addEventListener('click',()=>{
+  $('lb-img').src=b.dataset.src; $('lb-img').alt=b.querySelector('img').alt; $('lb-cap').textContent=b.dataset.cap||'';
+  if(lb.showModal) lb.showModal();
+}));
+lb.addEventListener('click',e=>{if(e.target===lb) lb.close()});
+
+const rdTabs=document.querySelectorAll('.rd-tabs button'), rdImg=document.getElementById('rd-img'), rdCap=document.getElementById('rd-cap');
+rdTabs.forEach(t=>t.addEventListener('click',()=>{rdTabs.forEach(x=>x.setAttribute('aria-selected',x===t?'true':'false'));
+  rdImg.src=t.dataset.img; rdImg.alt=t.textContent+' del Sisbén Cúcuta'; rdCap.textContent=t.dataset.cap;}));
+document.getElementById('rd-view').addEventListener('click',()=>{const lbx=document.getElementById('lb');
+  document.getElementById('lb-img').src=rdImg.src; document.getElementById('lb-img').alt=rdImg.alt; document.getElementById('lb-cap').textContent=rdCap.textContent;
+  if(lbx.showModal) lbx.showModal();});
+</script>
+
+</body>
+</html>
