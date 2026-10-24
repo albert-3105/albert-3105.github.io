@@ -372,9 +372,11 @@ section{padding-block:64px;border-top:1.5px solid var(--line)}
 .contact{background:var(--ink);color:var(--bg);border-radius:24px;padding:56px clamp(22px,5vw,64px);margin-block:24px 40px;border:0}
 .contact h2{font-size:clamp(36px,5.6vw,64px);font-weight:900;line-height:1;letter-spacing:-.03em;max-width:16ch}
 .contact p.s{margin-top:14px;opacity:.8;max-width:48ch}
-.cg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:36px}
+.cg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;margin-top:36px}
 .cg div{min-width:0}
 .cg .k{opacity:.7;font-size:15px}
+.cg .cv2{display:flex;gap:8px;flex-wrap:wrap}
+@media (max-width:1100px){.cg{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .cg .v{font-family:var(--display);font-weight:700;font-size:20px;word-break:break-word;margin-top:2px}
 .cg button,.cg a{margin-top:10px;display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--bg);border:1.5px solid currentColor;border-radius:10px;
   padding:7px 12px;font-family:var(--text);font-size:15px;cursor:pointer;text-decoration:none}
@@ -415,6 +417,7 @@ dialog form button{display:inline-flex;align-items:center;gap:6px;background:#E6
   <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-out" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5H5V6h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
 </svg>
 
@@ -844,11 +847,12 @@ dialog form button{display:inline-flex;align-items:center;gap:6px;background:#E6
 
   <section class="contact" id="contacto">
     <h2>¿Buscas a alguien para automatizar tu operación?</h2>
-    <p class="s">Busco un trabajo remoto de tiempo completo o un proyecto estable. Escríbeme por WhatsApp, correo o LinkedIn.</p>
+    <p class="s">Busco un trabajo remoto de tiempo completo o un proyecto estable. Escríbeme por WhatsApp, correo o LinkedIn, o descarga mi hoja de vida.</p>
     <div class="cg">
       <div><div class="k">WhatsApp</div><div class="v" id="v-tel">+57 320 518 3625</div><a href="https://wa.me/573205183625" target="_blank" rel="noopener"><svg class="ico"><use href="#i-chat"/></svg>Abrir chat</a></div>
-      <div><div class="k">Correo</div><div class="v" id="v-mail">albertbermudez31@gmail.com</div><button type="button" data-copy="v-mail"><svg class="ico"><use href="#i-copy"/></svg><span>Copiar</span></button></div>
+      <div><div class="k">Correo</div><div class="v" id="v-mail">albertbermudez31<wbr>@gmail.com</div><button type="button" data-copy="v-mail"><svg class="ico"><use href="#i-copy"/></svg><span>Copiar</span></button></div>
       <div><div class="k">LinkedIn</div><div class="v">albert-bermudez</div><a href="https://www.linkedin.com/in/albert-bermudez-554837252/" target="_blank" rel="noopener"><svg class="ico"><use href="#i-out"/></svg>Ver perfil</a></div>
+      <div><div class="k">Hoja de vida</div><div class="v">PDF · ES / EN</div><div class="cv2"><a href="cv/Hoja_de_vida_Albert_Bermudez.pdf" download><svg class="ico"><use href="#i-dl"/></svg>Español</a><a href="cv/CV_Albert_Bermudez_EN.pdf" download><svg class="ico"><use href="#i-dl"/></svg>English</a></div></div>
     </div>
   </section>
   <footer>Albert Bermúdez, ingeniero multimedia. Cúcuta, Colombia, 2026.</footer>
